@@ -1,0 +1,11 @@
+Description:
+    Creates a migration that adds authentication fields to the given model
+
+Example:
+    ./script/generate configurable_authentication User
+    rake db:migrate
+
+    This will add the  following fields to the user table:
+        logon
+        password_hash
+        salt
