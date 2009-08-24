@@ -44,10 +44,10 @@ module ConfigurableAuthentication
     class Configuration
       cattr_accessor :post_login_redirect, :post_logout_redirect, :after_login, :after_logout, :authentication_class,
         :login_success_message, :login_failure_message
-      @@after_login = nil # Proc or Hash supplying values for url_for(), or String with URL
-      @@post_logout_redirect = nil # Proc or Hash supplying values for url_for(), or String with URL
-      @@after_login = nil # Notifier callback post-login
-      @@after_logout = nil # Notifier callback post-logout
+      @@post_login_redirect = nil # Hash supplying values for url_for(), String with URL, or Proc returning one of these
+      @@post_logout_redirect = nil # As above
+      @@after_login = nil # Callback Proc post-login
+      @@after_logout = nil # Callback Proc post-logout
       @@authentication_class = nil
       @@login_success_message = 'login successful'
       @@login_failure_message = 'login failed'

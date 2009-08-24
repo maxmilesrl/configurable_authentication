@@ -1,9 +1,9 @@
 <% if flash[:warning] %><%= flash[:warning] %><% end %>
 <%= form_tag :action => 'login' %>
 <fieldset>
-  <legend>Inserisci i tuoi dati</legend>
+  <legend>Login</legend>
     <ul>
-      <li>Nome utente: <input type="text" name="user[logon]"/></li>
+      <li>User name: <input type="text" name="user[logon]"/></li>
       <li>Password: <input type="password" name="user[password]"/></li>
       <li><%= submit_tag("Login", option={"class"=>"button"}) %></li>
     </ul>
