@@ -11,7 +11,6 @@ Three classes are defined:
 
 Example
 =======
-
 In 'app/controllers/users_controller.rb' (Authenticator)
   class UsersController < ApplicationController
     acts_as_authenticator do |config|
@@ -33,5 +32,21 @@ In 'app/controllers/posts_controller.rb' (Authenticated)
   end
 
   before_filter :login_required, :except => :index
+
+Configuration
+=============
+Each class has a configuration class:
+- ConfigurableAuthentication::Authenticator::Configuration
+- ConfigurableAuthentication::Authentication::Configuration
+- ConfigurableAuthentication::Authenticated::Configuration
+
+The classes hold configuration as class variables.
+
+In order to get the values, inpect the class:
+ $ script/console
+ >> ConfigurableAuthentication::Authenticator::Configuration
+ => #<ConfigurableAuthentication::Authenticator::Configuration @@after_login=nil, @@post_logout_redirect=nil,
+ @@after_logout=nil, @@authentication_class=nil, @@post_login_redirect=nil, @@login_failure_message="login failed",
+ @@login_success_message="login successful">
 
 Copyright (c) 2009 Max Mile srl, released under the MIT license

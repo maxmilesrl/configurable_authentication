@@ -1,14 +1,25 @@
 module ConfigurableAuthentication
   require 'sha1'
 
+  module ConfigurationClassMethods
+    def inspect
+      aVars = class_variables.collect do |sVar|
+        sAccessor = sVar.match(/^@@(.*)/)[1]
+        "#{ sVar }=#{ self.send(sAccessor).inspect }"
+      end
+      "#<#{ self.name } #{ aVars.join(', ') }>"
+    end
+  end
+
   module Authenticated
     def self.included(base)
       base.extend(ClassMethods)
     end
 
     class Configuration
-      cattr_accessor :error_redirect, :login_redirect
-      @@error_redirect = nil
+      extend ::ConfigurableAuthentication::ConfigurationClassMethods
+      cattr_accessor \
+        :login_redirect
       @@login_redirect = nil
     end
 
@@ -42,21 +53,25 @@ module ConfigurableAuthentication
     end
 
     class Configuration
-      cattr_accessor :post_login_redirect, :post_logout_redirect, :after_login, :after_logout, :authentication_class,
-        :login_success_message, :login_failure_message
+      extend ::ConfigurableAuthentication::ConfigurationClassMethods
+
+      cattr_accessor \
+        :authentication_class,
+        :post_login_redirect,
+        :post_logout_redirect,
+        :after_login,
+        :after_logout, 
+        :login_success_message,
+        :login_failure_message
+      @@authentication_class = nil
       @@post_login_redirect = nil # Hash supplying values for url_for(), String with URL, or Proc returning one of these
       @@post_logout_redirect = nil # As above
       @@after_login = nil # Callback Proc post-login
       @@after_logout = nil # Callback Proc post-logout
-      @@authentication_class = nil
       @@login_success_message = 'login successful'
       @@login_failure_message = 'login failed'
       # TODO: @@session_user = :user
       # @@session_return_to = :return_to
-
-      def self.inspect # To do: use 'extend'
-        class_variables.collect {|sVar| "#{ sVar }=#{ eval(sVar).inspect }" }.join(', ')
-      end
     end
 
     module ClassMethods
@@ -82,6 +97,7 @@ module ConfigurableAuthentication
           flash[:warning] = config.login_failure_message
           return
         end
+
         session[:user] = usr
 
         flash[:message] = config.login_success_message
@@ -101,10 +117,10 @@ module ConfigurableAuthentication
 
       def logout
         config = ConfigurableAuthentication::Authenticator::Configuration
-        if config.after_logout
-          config.after_logout.call(session[:user])
-        end
+
         session[:user] = nil
+
+        config.after_logout.call(session[:user]) if config.after_logout
         redirect_to(config.post_logout_redirect) if config.post_logout_redirect
       end
     end
@@ -116,8 +132,16 @@ module ConfigurableAuthentication
     end
 
     class Configuration
-      cattr_accessor :user_name_column, :password_hash_column, :password_form_field, :password_confirmation_form_field,
-        :missing_password_message, :incorrect_password_confirmation_message, :missing_user_name_message, :non_unique_user_name_message
+      extend ::ConfigurableAuthentication::ConfigurationClassMethods
+      cattr_accessor \
+        :user_name_column,
+        :password_hash_column,
+        :password_form_field,
+        :password_confirmation_form_field,
+        :missing_password_message,
+        :incorrect_password_confirmation_message,
+        :missing_user_name_message,
+        :non_unique_user_name_message
       @@user_name_column = 'logon'
       @@password_hash_column = 'password_hash'
       @@password_form_field = 'password'
