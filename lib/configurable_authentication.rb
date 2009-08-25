@@ -201,11 +201,19 @@ module ConfigurableAuthentication
           end
         end
 
-        if logon.nil?
+        sLogon = read_attribute(config.user_name_column)
+        if sLogon.nil?
           errors.add config.user_name_column.intern, config.missing_user_name_message
         else
-          if self.class.find(:first, :conditions => ["#{ config.user_name_column } = ?", logon])
-            errors.add config.user_name_column.intern, config.non_unique_user_name_message
+          usr = self.class.find(:first, :conditions => ["#{ config.user_name_column } = ?", sLogon])
+          if self.id.nil?
+            if usr
+              errors.add config.user_name_column.intern, config.non_unique_user_name_message
+            end
+          else
+            if self != usr
+              errors.add config.user_name_column.intern, config.non_unique_user_name_message
+            end
           end
         end
       end
@@ -224,16 +232,12 @@ module ConfigurableAuthentication
         if self.salt.nil?
           write_attribute(:salt, random_string)
         end
-        sha1("#{ self.salt }#{ pass }")
+        Digest::SHA1.hexdigest("#{ self.salt }#{ pass }")
       end
 
       def random_string
         s = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
         (1..20).collect{s[rand(s.length),1]}.join
-      end
-
-      def sha1(pass)
-        Digest::SHA1.hexdigest(pass)
       end
     end
   end
