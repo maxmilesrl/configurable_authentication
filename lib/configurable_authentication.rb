@@ -1,5 +1,5 @@
 module ConfigurableAuthentication
-  require 'sha1'
+  require 'sha1' if RUBY_VERSION < '1.9'
 
   module ConfigurationClassMethods
     def inspect
@@ -211,7 +211,7 @@ module ConfigurableAuthentication
               errors.add config.user_name_column.intern, config.non_unique_user_name_message
             end
           else
-            if self != usr
+            if usr and self != usr
               errors.add config.user_name_column.intern, config.non_unique_user_name_message
             end
           end
