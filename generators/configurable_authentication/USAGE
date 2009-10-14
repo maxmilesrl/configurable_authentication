@@ -1,11 +1,15 @@
 Description:
-    Creates a migration that adds authentication fields to the given model
+  Creates a migration that adds authentication fields to the given model.
 
 Example:
-    ./script/generate configurable_authentication User
-    rake db:migrate
+If you don't have the users table, first create the migration for the model and table:
+ $ script/generate model User name:string surname:string email:string
 
-    This will add the following fields to the user table:
+If you already have a users table, you only need to add the authentication related fields:
+  $ script/generate configurable_authentication User
+  $ rake db:migrate
+
+  This will add the following fields to the user table:
         logon
         password_hash
         salt

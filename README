@@ -9,12 +9,18 @@ Three classes are defined:
 - Authentication: the model that represents users,
 - Authenticated: controllers that have actions which require authentication.
 
+Installation
+============
+This plugin includes a migration generator to setup the database.
+For instructions, type:
+  $ script/generate configurable_authentication
+
 Example
 =======
 In 'app/controllers/users_controller.rb' (Authenticator)
   class UsersController < ApplicationController
     acts_as_authenticator do |config|
-      config.authentication_class = ::User # this is obligatory
+      config.authentication_class = ::User # this is required
       config.post_login_redirect = {:controller => '/home', :action => 'index'} # default redirect to use after login
       config.post_logout_redirect = {:controller => '/home', :action => 'index'}
     end
