@@ -1,7 +1,7 @@
 ConfigurableAuthentication
 ==========================
 
-This plugin provides default behaviour for authentication.
+This Ruby on Rails plugin provides default behaviour for authentication.
 Only the minimum of code is generated (e.g. migrations).
 
 Three classes are defined:
@@ -11,6 +11,9 @@ Three classes are defined:
 
 Installation
 ============
+HTTP only (not as Git repo):
+  $ script/plugin install http://github.com/maxmilesrl/configurable_authentication.git/
+
 This plugin includes a migration generator to setup the database.
 For instructions, type:
   $ script/generate configurable_authentication
