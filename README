@@ -11,10 +11,10 @@ Three classes are defined:
 
 Installation
 ============
-HTTP only (not as Git repo):
-  $ script/plugin install http://github.com/maxmilesrl/configurable_authentication.git/
+Download:
+  $ ./script/plugin install git://github.com/maxmilesrl/configurable_authentication.git
 
-This plugin includes a migration generator to setup the database.
+This plugin includes a migration generator to add necessary fields to your user table.
 For instructions, type:
   $ script/generate configurable_authentication
 
